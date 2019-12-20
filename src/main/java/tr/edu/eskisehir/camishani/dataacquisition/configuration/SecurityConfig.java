@@ -23,29 +23,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {  // Spring Security Configuration
         http
-                .formLogin().defaultSuccessUrl("/index.html");
-        http
-                .csrf().disable();
-        http
-                .logout()
-                .logoutSuccessUrl("/login");
+                .formLogin().defaultSuccessUrl("/index.html")
+                .and()
+                .csrf().disable()
+                .logout().logoutSuccessUrl("/login");
 
     }
 
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/css/**")
-                .antMatchers("/icon-fonts/**")
+                .antMatchers("/fonts/**")
                 .antMatchers("/images/**")
-                .antMatchers("/js/**")
-                .antMatchers("index.html");
+                .antMatchers("/js/**");
     }
 
     @Autowired
     public void configAuthentication(final AuthenticationManagerBuilder auth, final DataSource dataSource) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("select username, password, enabled from logins where username=?")
+                .usersByUsernameQuery("select username, password, enabled from users where username=?")
                 .authoritiesByUsernameQuery("select username, authority from authorities where username=?");
     }
 
