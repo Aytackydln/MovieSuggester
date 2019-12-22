@@ -1,58 +1,240 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-    <title>Popcorn Flex</title>
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet"
-          type="text/css">
+<meta charset="utf-8">
+<title>Online Movie Suggester</title>
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="css/font-awesome.css">
+<link rel="stylesheet" href="css/rating.css">
 
-    <link rel="stylesheet" type="text/css" href="css/app.css">
 </head>
+
 <body>
 
- <nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Popcorn Flex</a>
-    </div>
-    <div id="navbar" class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#categories">Categories</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="signup.html">Signup  <i class="fa fa-user-plus"></i></a></li>
-        <li><a href="login.html">Login  <i class="fa fa-user"></i></a></li>
-      </ul>
-    </div>
-  </div>
- </nav>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+	<a class="navbar-brand" href="#">Movie Suggester</a>
+	<ul class="navbar-nav ml-auto">
+		<li class="nav-item">
+			<a class="nav-link" href="#">Home</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#movies">Movies</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="./login.html">Login</a>
+		</li>
+	</ul>
+</nav>
 
- <div class="container">
- 	<div class="row">
- 		<div class="col-lg-12">
- 			<div class="content">
- 				<h1>Popcorn Flex</h1>
- 				<h3>Thousands of movies. Available Anywhere.</h3>
- 				<hr>
- 				<button class="btn btn-default btn-lg"><i class="glyphicon glyphicon-play"></i> Get Started!</button>
- 			</div>
- 		</div>
- 	</div>
- </div>
+    <div id="movies" class="container">
+    		<div id="card1" class="movie-card">
+			<div class="movie-header" style="background: url(https://m.media-amazon.com/images/M/MV5BMTk5ODk1NDkxMF5BMl5BanBnXkFtZTcwNTA5OTY0OQ@@._V1_SX300.jpg)">
 
- <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.js"></script>
- <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+			</div><!--movie-header-->
+		<div class="movie-content">
+			<div class="movie-content-header">
+				<a href="#">
+					<h3 class="movie-title">Man of Steel</h3>
+				</a>
+			</div>
+			<div class="movie-info">
+				<div class="info-section">
+					<label>Released</label>
+					<span>14 Jun 2013</span>
+				</div>
+				<div class="info-section">
+					<label>Runtime</label>
+					<span>143 min</span>
+				</div><!--screen-->
+				<div class="info-section">
+					<label>IMDB</label>
+					<a href="https://www.imdb.com/title/tt0770828"><i class="icon-external-link"></i></a>
+				</div>
+			</div>
+			<div class="rating-center">
+			  <form id="form1" action="./models/model" method="post">
+		  		
+		  			<input class="movieId" type="hidden" value="id1" />
+		  			<input class="userRating" type="hidden"/>
+			  		
+					<div class="rating">
+						<input id="star5" name="star" type="radio" value="1-5" class="radio-btn hide" />
+						<label for="star5" >☆</label>
+						<input id="star4" name="star" type="radio" value="1-4" class="radio-btn hide" />
+						<label for="star4" >☆</label>
+						<input id="star3" name="star" type="radio" value="1-3" class="radio-btn hide" />
+						<label for="star3" >☆</label>
+						<input id="star2" name="star" type="radio" value="1-2" class="radio-btn hide" />
+						<label for="star2" >☆</label>
+						<input id="star1" name="star" type="radio" value="1-1" class="radio-btn hide" />
+						<label for="star1" >☆</label>
+						<div class="clear"></div>
+					</div>
+					
+			
+				</form>
+			</div>
+		</div><!--movie-content-->
+	</div><!--movie-card-->
+	
+	<div id="card2" class="movie-card">
+		<div class="movie-header" style="background: url(https://m.media-amazon.com/images/M/MV5BMjM3MjQ1MzkxNl5BMl5BanBnXkFtZTgwODk1ODgyMjI@._V1_SX300.jpg);">
+		
+		</div><!--movie-header-->
+		<div class="movie-content">
+			<div class="movie-content-header">
+				<a href="#">
+					<h3 class="movie-title">Baby Driver</h3>
+				</a>
+			</div>
+			<div class="movie-info">
+				<div class="info-section">
+					<label>Released</label>
+					<span>28 Jun 2017</span>
+				</div>
+				<div class="info-section">
+					<label>Runtime</label>
+					<span>113 min</span>
+				</div><!--screen-->
+				<div class="info-section">
+					<label>IMDB</label>
+					<a href="https://www.imdb.com/title/tt3890160"><i class="icon-external-link"></i></a>
+				</div>
+			</div>
+			<div class="rating-center">
+			  <form id="form2" action="./models/model" method="post">
+		  		
+		  			<input class="movieId" type="hidden" value="id2" />
+		  			<input class="userRating" type="hidden"/>
+			  		
+					<div class="rating">
+						<input id="star5-2" name="star" type="radio" value="2-5" class="radio-btn hide" />
+						<label for="star5-2" >☆</label>
+						<input id="star4-2" name="star" type="radio" value="2-4" class="radio-btn hide" />
+						<label for="star4-2" >☆</label>
+						<input id="star3-2" name="star" type="radio" value="2-3" class="radio-btn hide" />
+						<label for="star3-2" >☆</label>
+						<input id="star2-2" name="star" type="radio" value="2-2" class="radio-btn hide" />
+						<label for="star2-2" >☆</label>
+						<input id="star1-2" name="star" type="radio" value="2-1" class="radio-btn hide" />
+						<label for="star1-2" >☆</label>
+						<div class="clear"></div>
+					</div>
+				</form>
+			</div>
+		</div><!--movie-content-->
+	</div><!--movie-card-->
+	
+	<div id="card3" class="movie-card">
+		<div class="movie-header" style="background: url(https://m.media-amazon.com/images/M/MV5BMTU3MjUwMzQ3MF5BMl5BanBnXkFtZTgwMjcwNjkxMjI@._V1_SX300.jpg);">
+			
+		</div><!--movie-header-->
+		<div class="movie-content">
+			<div class="movie-content-header">
+				<a href="#">
+					<h3 class="movie-title">The Dark Tower</h3>
+				</a>
+			</div>
+			<div class="movie-info">
+				<div class="info-section">
+					<label>Released</label>
+					<span>04 Aug 2017</span>
+				</div>
+				<div class="info-section">
+					<label>Runtime</label>
+					<span>95 min</span>
+				</div><!--screen-->
+				<div class="info-section">
+					<label>IMDB</label>
+					<a href="https://www.imdb.com/title/tt1648190"><i class="icon-external-link"></i></a>
+				</div>
+			</div>
+			<div class="rating-center">
+			  <form id="form3" action="./models/model" method="post">
+		  		
+		  			<input class="movieId" type="hidden" value="id3" />
+		  			<input class="userRating" type="hidden"/>
+			  		
+					<div class="rating">
+						<input id="star5-3" name="star" type="radio" value="3-5" class="radio-btn hide" />
+						<label for="star5-3" >☆</label>
+						<input id="star4-3" name="star" type="radio" value="3-4" class="radio-btn hide" />
+						<label for="star4-3" >☆</label>
+						<input id="star3-3" name="star" type="radio" value="3-3" class="radio-btn hide" />
+						<label for="star3-3" >☆</label>
+						<input id="star2-3" name="star" type="radio" value="3-2" class="radio-btn hide" />
+						<label for="star2-3" >☆</label>
+						<input id="star1-3" name="star" type="radio" value="3-1" class="radio-btn hide" />
+						<label for="star1-3" >☆</label>
+						<div class="clear"></div>
+					</div>
+				</form>
+			</div>
+		</div><!--movie-content-->
+	</div><!--movie-card-->
+	
+	
+	<div id="card4" class="movie-card">
+		<div class="movie-header" style="background: url(https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg);">
+	
+		</div><!--movie-header-->
+		<div class="movie-content">
+			<div class="movie-content-header">
+				<a href="#">
+					<h3 class="movie-title">Blade Runner 2049</h3>
+				</a>
+			</div>
+			<div class="movie-info">
+				<div class="info-section">
+					<label>Released</label>
+					<span>06 Oct 2017</span>
+				</div>
+				<div class="info-section">
+					<label>Runtime</label>
+					<span>164 min</span>
+				</div><!--screen-->
+				<div class="info-section">
+					<label>IMDB</label>
+					<a href="https://www.imdb.com/title/tt1856101"><i class="icon-external-link"></i></a>
+				</div>
+			</div>
+			<div class="rating-center">
+			  <form id="form4" action="./models/model" method="post">
+		  		
+		  			<input class="movieId" type="hidden" value="id4" />
+		  			<input class="userRating" type="hidden"/>
+			  		
+					<div class="rating">
+						<input id="star5-4" name="star" type="radio" value="4-5" class="radio-btn hide" />
+						<label for="star5-4" >☆</label>
+						<input id="star4-4" name="star" type="radio" value="4-4" class="radio-btn hide" />
+						<label for="star4-4" >☆</label>
+						<input id="star3-4" name="star" type="radio" value="4-3" class="radio-btn hide" />
+						<label for="star3-4" >☆</label>
+						<input id="star2-4" name="star" type="radio" value="4-2" class="radio-btn hide" />
+						<label for="star2-4" >☆</label>
+						<input id="star1-4" name="star" type="radio" value="4-1" class="radio-btn hide" />
+						<label for="star1-4" >☆</label>
+						<div class="clear"></div>
+					</div>
+				</form>
+			</div>
+		</div><!--movie-content-->
+	</div><!--movie-card-->
+                    
+	</div>
+	
+	
+	<form>
+		
+	</form>
 
 
+
+
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
