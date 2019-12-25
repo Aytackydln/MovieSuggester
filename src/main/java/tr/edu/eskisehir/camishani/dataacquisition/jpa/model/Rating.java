@@ -1,5 +1,7 @@
 package tr.edu.eskisehir.camishani.dataacquisition.jpa.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.id.RatingKey;
 
 import javax.persistence.*;
@@ -27,7 +29,7 @@ public class Rating implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
-        id.setUser(user.getId());
+        if (user != null) id.setUser(user.getId());
     }
 
     @Id
@@ -38,7 +40,7 @@ public class Rating implements Serializable {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
-        id.setMovie(movie.getId());
+        if (movie != null) id.setMovie(movie.getId());
     }
 
     public int getRating() {
