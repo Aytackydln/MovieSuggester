@@ -6,12 +6,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Movie {
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
 
     private int id;
     private String title;
@@ -91,11 +96,31 @@ public class Movie {
         int n = 0;
 
         for (Rating r : getRatings()) {
-            rating += r.getRating();
+            if (r.getRating() < 6)
+                rating += r.getRating();
+            else System.out.println("Rating :" + r.getRating());
             n++;
         }
         rating /= n;
 
-        return rating;
+        return Double.parseDouble(DECIMAL_FORMAT.format(rating));
+    }
+
+    @Transient
+    public int getTotalRatings() {
+        return getRatings().size();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return getId() == movie.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

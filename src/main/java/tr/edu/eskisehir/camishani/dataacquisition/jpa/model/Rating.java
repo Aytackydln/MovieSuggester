@@ -6,13 +6,14 @@ import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.id.RatingKey;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @IdClass(RatingKey.class)
 public class Rating implements Serializable {
 
     private final RatingKey id = new RatingKey();
-    private User user;
+    private int userId;
     private Movie movie;
     private int rating;
 
@@ -22,14 +23,14 @@ public class Rating implements Serializable {
     }
 
     @Id
-    @ManyToOne
-    public User getUser() {
-        return user;
+    @Column(name = "user_id")
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-        if (user != null) id.setUser(user.getId());
+    public void setUserId(int user) {
+        this.userId = user;
+        id.setUserId(user);
     }
 
     @Id
@@ -41,6 +42,7 @@ public class Rating implements Serializable {
     public void setMovie(Movie movie) {
         this.movie = movie;
         if (movie != null) id.setMovie(movie.getId());
+        else id.setMovie(0);
     }
 
     public int getRating() {
@@ -49,5 +51,18 @@ public class Rating implements Serializable {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rating rating = (Rating) o;
+        return getId().equals(rating.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

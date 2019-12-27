@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -58,7 +59,7 @@ public class User implements Serializable {
     }
 
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
     @JsonIgnore
     public List<Rating> getRatings() {
         return ratings;
@@ -66,5 +67,23 @@ public class User implements Serializable {
 
     public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return getId() == user.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
+    @Transient
+    public int getTotalRatings() {
+        return getRatings().size();
     }
 }
