@@ -1,8 +1,8 @@
 package tr.edu.eskisehir.camishani.dataacquisition.service;
 
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
-import org.apache.commons.math3.util.IntegerSequence;
 import org.apache.commons.math3.util.Precision;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +19,7 @@ import tr.edu.eskisehir.camishani.dataacquisition.jpa.repository.UserRepository;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -69,20 +70,23 @@ public class CollaborativeService {
         this.userService = userService;
     }
 
-    @Transactional(readOnly = true)
     public Movie getUndecided() {
-        final Movie movie = movieRepository.getById(rng.nextInt(((int) movieRepository.count())));
-        System.out.println(movie.getRatings().size());
-        return movie;
+        return getUndecidedList(5).iterator().next();
     }
 
-    public Iterable<Movie> getUndecidedList() {
-        return movieRepository.findAllById(new IntegerSequence.Range(1 + rng.nextInt(10), 10 + rng.nextInt(36), 1 + rng.nextInt(2)));
+    public Movie getUndecided(List<Movie> filterOut) {
+        if (filterOut == null)
+            return getUndecided();
+        return movieRepository.getUnvotedMoviesOfUser(userService.getCurrentUser(), PageRequest.of(0, 5), filterOut).iterator().next();
+    }
+
+    public Iterable<Movie> getUndecidedList(Integer size) {
+        return movieRepository.getUnvotedMoviesOfUser(userService.getCurrentUser(), PageRequest.of(0, size)).getContent();
     }
 
     @Transactional(readOnly = true)
-    public Movie getUserBasedRecommend() {
-        TopNList<User> topNList = new TopNList<>(userService.getCurrentUser(), 40, PEARSONS_CORRELATION, USER_FACTOR_GETTER, PEARSON_COMPARATOR);
+    public Movie getUserBasedRecommend(int neighbors) {
+        TopNList<User> topNList = new TopNList<>(userService.getCurrentUser(), neighbors, PEARSONS_CORRELATION, USER_FACTOR_GETTER, PEARSON_COMPARATOR);
 
         for (User otherUser : userRepository.getAllByIdIsNot(userService.getCurrentUser().getId()))
             topNList.add(otherUser);
@@ -104,6 +108,7 @@ public class CollaborativeService {
             Pair<User, Double> u = it.next();
             User user = u.getFirst();
             double similarity = u.getSecond();
+
 
             if (similarity > 0) {
                 for (Rating rating : user.getRatings()) {

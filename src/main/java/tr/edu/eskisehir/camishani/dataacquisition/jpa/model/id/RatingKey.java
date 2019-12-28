@@ -11,11 +11,6 @@ public class RatingKey implements Serializable {
     public RatingKey() {
     }
 
-    public RatingKey(int user, int movie) {
-        this.user = user;
-        this.movie = movie;
-    }
-
     public int getUser() {
         return user;
     }
