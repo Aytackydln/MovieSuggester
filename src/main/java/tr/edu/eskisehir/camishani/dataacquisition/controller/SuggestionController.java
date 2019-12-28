@@ -30,7 +30,7 @@ public class SuggestionController {
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, path = "userSuggestion")
     public Movie getUserSuggestion() {
-        return collaborativeService.getUndecided();
+        return collaborativeService.getUserBasedRecommend();
     }
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, path = "random")

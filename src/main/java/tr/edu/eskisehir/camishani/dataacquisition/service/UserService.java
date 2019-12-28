@@ -1,8 +1,7 @@
 package tr.edu.eskisehir.camishani.dataacquisition.service;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.transaction.annotation.Transactional;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.User;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.repository.UserRepository;
 
@@ -14,7 +13,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional(readOnly = true)
     public User getCurrentUser() {
-        return userRepository.findById(1).get();
+        final User user = userRepository.findById(1).get();
+        user.getRatings().size();
+        return user;
     }
 }

@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Rating implements Serializable {
 
     private final RatingKey id = new RatingKey();
-    private int userId;
+    private User user;
     private Movie movie;
     private int rating;
 
@@ -23,14 +23,15 @@ public class Rating implements Serializable {
     }
 
     @Id
-    @Column(name = "user_id")
-    public int getUserId() {
-        return userId;
+    @ManyToOne
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int user) {
-        this.userId = user;
-        id.setUserId(user);
+    public void setUser(User user) {
+        this.user = user;
+        if (user != null) id.setUser(user.getId());
+        else id.setUser(0);
     }
 
     @Id

@@ -3,6 +3,7 @@ package tr.edu.eskisehir.camishani.dataacquisition.jpa.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import tr.edu.eskisehir.camishani.dataacquisition.cfiltering.SimilarityMeasurable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class User implements Serializable {
+public class User implements Serializable, SimilarityMeasurable {
 
     private int id;
     private String username;
@@ -59,7 +60,7 @@ public class User implements Serializable {
     }
 
 
-    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     public List<Rating> getRatings() {
         return ratings;
@@ -85,5 +86,24 @@ public class User implements Serializable {
     @Transient
     public int getTotalRatings() {
         return getRatings().size();
+    }
+
+    @Override
+    @Transient
+    @JsonIgnore
+    public Iterable<Rating> getSimilarityFactors() {
+        return getRatings();
+    }
+
+    @Transient
+    @JsonIgnore
+    @Override
+    public int getMaxFactorId() {
+        int max = 0;
+        for (Rating r : getSimilarityFactors()) {
+            if (r.getMovie().getId() > max)
+                max = r.getMovie().getId();
+        }
+        return max;
     }
 }
