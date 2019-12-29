@@ -29,7 +29,7 @@ $(document).ready(function(){
 			  dataType: "json",
 			  contentType: "application/json; charset=utf-8",
 			  beforeSend: function(){
-				  $('body').loading();
+
 			  },
 			  success: function(data){
 				  let movie = new Movie();
