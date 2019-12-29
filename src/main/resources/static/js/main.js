@@ -20,7 +20,7 @@ $(document).ready(function(){
 
 		console.log("VoteResult = "+ voteResult.toJson());
 
-		alert(ratedMovieId + " : " + rating);
+		//alert(ratedMovieId + " : " + rating);
 
 		  jQuery.ajax ({
 			  url: "./suggestion/vote",
@@ -29,13 +29,16 @@ $(document).ready(function(){
 			  dataType: "json",
 			  contentType: "application/json; charset=utf-8",
 			  beforeSend: function(){
-
+				  $("#overlay").fadeIn(300);
 			  },
 			  success: function(data){
 				  let movie = new Movie();
 				  movie.applyData(data);
 				  array[value[0]-1] = movie;
 				  setCardValues(card,data);
+			  },
+			  complete: function() {
+					  $("#overlay").fadeOut(300);
 			  },
 			  fail: function () {
 			  	  alert("There is an error while sending your vote!")
