@@ -2,10 +2,7 @@ package tr.edu.eskisehir.camishani.dataacquisition.jpa.model;
 
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.id.MovieSimilarityKey;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @IdClass(MovieSimilarityKey.class)
@@ -25,7 +22,7 @@ public class MovieSimilarity {
     }
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     public Movie getMovie1() {
         return movie1;
     }
@@ -35,7 +32,7 @@ public class MovieSimilarity {
     }
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     public Movie getMovie2() {
         return movie2;
     }

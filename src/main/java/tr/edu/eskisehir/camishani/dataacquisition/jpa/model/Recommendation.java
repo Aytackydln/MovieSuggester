@@ -61,6 +61,7 @@ public class Recommendation {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+        movie.getRatings().size();
     }
 
     public double getPrediction() {

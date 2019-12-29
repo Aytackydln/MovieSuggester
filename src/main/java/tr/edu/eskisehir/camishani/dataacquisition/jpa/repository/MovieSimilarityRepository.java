@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface MovieSimilarityRepository extends CrudRepository<MovieSimilarity, MovieSimilarityKey> {
 
-    @Query("SELECT s FROM MovieSimilarity s WHERE s.movie1 = :movie OR s.movie2 = :movie ORDER BY s.similarity DESC")
+    @Query("SELECT s FROM MovieSimilarity s  JOIN FETCH s.movie1 WHERE s.movie1 = :movie OR s.movie2 = :movie ORDER BY s.similarity DESC")
     List<MovieSimilarity> getSimilaritiesOf(Movie movie);
 }

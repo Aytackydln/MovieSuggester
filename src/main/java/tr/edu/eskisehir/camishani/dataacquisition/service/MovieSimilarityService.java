@@ -2,6 +2,7 @@ package tr.edu.eskisehir.camishani.dataacquisition.service;
 
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.Movie;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.MovieSimilarity;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.Rating;
@@ -24,6 +25,7 @@ public class MovieSimilarityService {
         this.movieRepository = movieRepository;
     }
 
+    @Transactional
     public void updateAllSimilarities(Integer start) {
         if (start == null) start = 0;
         Queue<Movie> remainingMovies = new LinkedList<>(movieRepository.getAll());
@@ -35,7 +37,6 @@ public class MovieSimilarityService {
             final Map<User, Integer> movie1ratings = movie1.getRatings().stream().collect(Collectors.toMap(Rating::getUser, Rating::getRating));
 
             List<Movie> subMovies = new ArrayList<>(remainingMovies);
-            System.out.println("Calculating similarities of " + movie1 + " against " + subMovies.size());
             final List<MovieSimilarity> similarities = Collections.synchronizedList(new ArrayList<>());
             IntStream.range(0, remainingMovies.size() - 1).parallel().forEach((j) -> {
                 final Movie movie2 = subMovies.get(j);

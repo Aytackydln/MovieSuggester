@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class CollaborativeService {
@@ -154,6 +153,7 @@ public class CollaborativeService {
         return recommendation;
     }
 
+    @Transactional
     public Recommendation getItemBasedRecommend(Integer neighbors) {
         if (neighbors == null) neighbors = 60;
         final Recommendation recommendation = new Recommendation();
@@ -230,10 +230,11 @@ public class CollaborativeService {
             }
         }
 
-        Movie recommendedMovie = movieRepository.getById(bestMovieId);
+        Movie recommendedMovie = movieRepository.findById(bestMovieId).get();
         recommendation.setMovie(recommendedMovie);
         recommendation.setPrediction(bestRating);
         double accuracy = (double) correct / (correct + incorrect) * 100;
+        if (Double.isNaN(accuracy)) accuracy = 0;
         recommendation.setAccuracy(accuracy);
         recommendationRepository.save(recommendation);
 
