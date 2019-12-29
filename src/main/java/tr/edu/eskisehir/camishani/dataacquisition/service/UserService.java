@@ -20,7 +20,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getCurrentUser() {
-        final User user = userRepository.findById(1).get();
+        final User user = userRepository.findById(441).get();
         user.getRatings().size();
         return user;
     }

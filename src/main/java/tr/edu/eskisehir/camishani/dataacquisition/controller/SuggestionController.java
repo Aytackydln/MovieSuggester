@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tr.edu.eskisehir.camishani.dataacquisition.dto.SubmitVoteRequest;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.Movie;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.Rating;
+import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.Recommendation;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.repository.MovieRepository;
 import tr.edu.eskisehir.camishani.dataacquisition.service.CollaborativeService;
 import tr.edu.eskisehir.camishani.dataacquisition.service.UserService;
@@ -32,12 +33,12 @@ public class SuggestionController {
     }
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, path = "itemSuggestion")
-    public Movie getItemSuggestion() {
-        return collaborativeService.getUndecided();
+    public Recommendation getItemSuggestion(Integer neighbors) {
+        return collaborativeService.getItemBasedRecommend(neighbors);
     }
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, path = "userSuggestion")
-    public Movie getUserSuggestion(Integer neighbors) {
+    public Recommendation getUserSuggestion(Integer neighbors) {
         return collaborativeService.getUserBasedRecommend(neighbors);
     }
 

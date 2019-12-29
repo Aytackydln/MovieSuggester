@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.Movie;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.repository.MovieRepository;
+import tr.edu.eskisehir.camishani.dataacquisition.service.MovieSimilarityService;
 import tr.edu.eskisehir.camishani.dataacquisition.service.OmdbService;
 
 import java.util.ArrayList;
@@ -16,12 +17,14 @@ import java.util.List;
 public class MovieUpdateController {
     private static final Logger LOGGER = LogManager.getLogger(MovieUpdateController.class);
 
-    private MovieRepository movieRepository;
-    private OmdbService omdbService;
+    private final MovieRepository movieRepository;
+    private final OmdbService omdbService;
+    private final MovieSimilarityService movieSimilarityService;
 
-    public MovieUpdateController(MovieRepository movieRepository, OmdbService omdbService) {
+    public MovieUpdateController(MovieRepository movieRepository, OmdbService omdbService, MovieSimilarityService movieSimilarityService) {
         this.movieRepository = movieRepository;
         this.omdbService = omdbService;
+        this.movieSimilarityService = movieSimilarityService;
     }
 
     @GetMapping("updateMovie/{movieId}")
@@ -148,6 +151,13 @@ public class MovieUpdateController {
             updateAndSave(failedMovies, movie);
         }
         return failedMovies;
+    }
+
+    @GetMapping("updateSimilarities")
+    public String updateSimilarities(Integer start) {
+        movieSimilarityService.updateAllSimilarities(start);
+
+        return "OK";
     }
 
     private void updateAndSave(Movie movie) {

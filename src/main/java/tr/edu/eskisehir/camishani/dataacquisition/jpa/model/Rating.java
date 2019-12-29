@@ -17,6 +17,14 @@ public class Rating implements Serializable {
     private Movie movie;
     private int rating;
 
+    @Override
+    public String toString() {
+        return "Rating{" +
+                "movie=" + movie +
+                ", rating=" + rating +
+                '}';
+    }
+
     @Transient
     public RatingKey getId() {
         return id;

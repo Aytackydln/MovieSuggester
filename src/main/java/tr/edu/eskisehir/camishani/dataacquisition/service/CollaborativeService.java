@@ -1,6 +1,5 @@
 package tr.edu.eskisehir.camishani.dataacquisition.service;
 
-import cf4j.knn.itemToItem.similarities.MetricCosine;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.commons.math3.util.Precision;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +22,7 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 
 @Service
 public class CollaborativeService {
@@ -49,27 +48,17 @@ public class CollaborativeService {
             double[] row1 = new double[rowLength];
             double[] row2 = new double[rowLength];
 
-            double total = 0, n = 0;
-
             for (Object o : value1.getSimilarityFactors()) {
-                int value = similarityFactorGetter.getMeasureValue(o);
-                //total+=value;
-                //n++;
-                row1[similarityFactorGetter.getMeasureId(o) - 1] = value;
+                row1[similarityFactorGetter.getMeasureId(o) - 1] = similarityFactorGetter.getMeasureValue(o);
             }
-            //total/=n;
+
             for (int i = 0; i < rowLength; i++)
                 if (row1[i] == 0) row1[i] = 3;
 
-            total = 0;
-            n = 0;
             for (Object o : values2.getSimilarityFactors()) {
-                int value = similarityFactorGetter.getMeasureValue(o);
-                //total+=value;
-                //n++;
-                row2[similarityFactorGetter.getMeasureId(o) - 1] = value;
+                row2[similarityFactorGetter.getMeasureId(o) - 1] = similarityFactorGetter.getMeasureValue(o);
             }
-            //total/=n;
+
             for (int i = 0; i < rowLength; i++)
                 if (row2[i] == 0) row2[i] = 3;
 
@@ -79,17 +68,18 @@ public class CollaborativeService {
     private static final Comparator<Pair<User, Double>> ABS_PEARSON_COMPARATOR = (o1, o2) -> Double.compare(Math.abs(o2.getSecond()), Math.abs(o1.getSecond()));
     private static final Comparator<Pair<User, Double>> REAL_PEARSON_COMPARATOR = (o1, o2) -> Double.compare(o2.getSecond(), o1.getSecond());
 
-    private final Random rng = new Random();
     private final MovieRepository movieRepository;
     private final UserRepository userRepository;
     private final RecommendationRepository recommendationRepository;
     private final UserService userService;
+    private final MovieSimilarityService movieSimilarityService;
 
-    public CollaborativeService(MovieRepository movieRepository, UserRepository userRepository, RecommendationRepository recommendationRepository, UserService userService) {
+    public CollaborativeService(MovieRepository movieRepository, UserRepository userRepository, RecommendationRepository recommendationRepository, UserService userService, MovieSimilarityService movieSimilarityService) {
         this.movieRepository = movieRepository;
         this.userRepository = userRepository;
         this.recommendationRepository = recommendationRepository;
         this.userService = userService;
+        this.movieSimilarityService = movieSimilarityService;
     }
 
     public Movie getUndecided() {
@@ -107,7 +97,7 @@ public class CollaborativeService {
     }
 
     @Transactional()
-    public Movie getUserBasedRecommend(Integer neighbors) {
+    public Recommendation getUserBasedRecommend(Integer neighbors) {
         if (neighbors == null) neighbors = 60;
         final Recommendation recommendation = new Recommendation();
         recommendation.setK(neighbors);
@@ -159,10 +149,47 @@ public class CollaborativeService {
             }
         }
 
-        for (int i = 0; i < maxMovieId; i++) {
-            if (movies[i] != 0) {
-                double result = movies[i] / totalSimilarity[i];
-                movies[i] = Precision.round(result, 2, BigDecimal.ROUND_HALF_DOWN);
+        getBestMovie(recommendation, movies, totalSimilarity);
+
+        return recommendation;
+    }
+
+    public Recommendation getItemBasedRecommend(Integer neighbors) {
+        if (neighbors == null) neighbors = 60;
+        final Recommendation recommendation = new Recommendation();
+        recommendation.setK(neighbors);
+
+        User currentUser = userService.getCurrentUser();
+        recommendation.setUser(currentUser);
+        recommendation.setType("item");
+
+        int maxMovieId = movieRepository.getMaximumId();
+
+        double[] movieRatings = new double[maxMovieId + 1];
+        double[] totalSimilarities = new double[maxMovieId + 1];
+
+        int ratingNo = 0;
+        for (Rating r : currentUser.getRatings()) {
+            final Movie votedMovie = r.getMovie();
+            List<Pair<Movie, Double>> similarities = movieSimilarityService.getSimilarityMap(votedMovie, neighbors);
+            for (Pair<Movie, Double> entry : similarities) {
+                movieRatings[entry.getFirst().getId()] += entry.getSecond() * r.getRating();
+                totalSimilarities[entry.getFirst().getId()] += entry.getSecond();
+            }
+            ratingNo++;
+        }
+
+        getBestMovie(recommendation, movieRatings, totalSimilarities);
+
+        return recommendation;
+    }
+
+    private void getBestMovie(Recommendation recommendation, double[] movieRatings, double[] totalSimilarities) {
+
+        for (int i = 1; i < movieRatings.length; i++) {
+            if (movieRatings[i] != 0) {
+                double result = movieRatings[i] / totalSimilarities[i];
+                movieRatings[i] = Precision.round(result, 2, BigDecimal.ROUND_HALF_DOWN);
             }
         }
 
@@ -172,13 +199,16 @@ public class CollaborativeService {
         double bestRating = 0;
         double bestTotalSimilarity = 0;
         int bestMovieId = 0;
+
+        List<Rating> alreadyRatedList = userService.getCurrentUser().getRatings();
+
         bestResult:
-        for (int i = 0; i < maxMovieId; i++) {
-            if (movies[i] != 0) {//TODO aggregate ten sonra bak
+        for (int i = 0; i < movieRatings.length; i++) {
+            if (movieRatings[i] != 0) {
                 //compute accuracy
-                for (Rating alreadyRated : currentUser.getRatings()) {
+                for (Rating alreadyRated : alreadyRatedList) {
                     if (alreadyRated.getId().getMovie() == i) {
-                        int roundedPrediction = (int) Math.round(movies[i]);
+                        int roundedPrediction = (int) Math.round(movieRatings[i]);
                         if (roundedPrediction == alreadyRated.getRating()) {
                             correct++;
                         } else {
@@ -188,17 +218,18 @@ public class CollaborativeService {
                     }
                 }
 
-                if (movies[i] > bestRating) {
+                if (movieRatings[i] > bestRating) {
                     bestMovieId = i;
-                    bestRating = movies[i];
-                    bestTotalSimilarity = totalSimilarity[i];
-                } else if (movies[i] == bestRating && totalSimilarity[i] > bestTotalSimilarity) {
+                    bestRating = movieRatings[i];
+                    bestTotalSimilarity = totalSimilarities[i];
+                } else if (movieRatings[i] == bestRating && totalSimilarities[i] > bestTotalSimilarity) {
                     bestMovieId = i;
-                    bestRating = movies[i];
-                    bestTotalSimilarity = totalSimilarity[i];
+                    bestRating = movieRatings[i];
+                    bestTotalSimilarity = totalSimilarities[i];
                 }
             }
         }
+
         Movie recommendedMovie = movieRepository.getById(bestMovieId);
         recommendation.setMovie(recommendedMovie);
         recommendation.setPrediction(bestRating);
@@ -207,8 +238,7 @@ public class CollaborativeService {
         recommendationRepository.save(recommendation);
 
         System.out.println(correct + " correct, " + incorrect + " incorrect" +
-                " " + accuracy + "% k=" + neighbors);
+                " " + accuracy + "% k=" + recommendation.getK());
 
-        return recommendedMovie;
     }
 }

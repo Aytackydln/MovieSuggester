@@ -12,6 +12,9 @@ import java.util.List;
 public interface MovieRepository extends PagingAndSortingRepository<Movie, Integer> {
     Movie getById(int id);
 
+    @Query("SELECT m FROM Movie m")
+    List<Movie> getAll();
+
     List<Movie> getAllByPosterIs(String poster);
 
     List<Movie> getAllByPosterIsNull();
@@ -25,4 +28,7 @@ public interface MovieRepository extends PagingAndSortingRepository<Movie, Integ
 
     @Query("SELECT m FROM Movie m where not exists (SELECT r.movie FROM Rating r where r.user = :user and r.movie = m) AND m not in :except")
     Page<Movie> getUnvotedMoviesOfUser(User user, Pageable pageable, List<Movie> except);
+
+    @Query("SELECT max(m.id) FROM Movie m")
+    Integer getMaximumId();
 }

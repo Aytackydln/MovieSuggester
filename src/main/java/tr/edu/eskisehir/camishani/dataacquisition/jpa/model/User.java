@@ -22,6 +22,14 @@ public class User implements Serializable, SimilarityMeasurable {
     private List<String> authority = new ArrayList<>();
     private List<Rating> ratings;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                '}';
+    }
+
     @Id
     public int getId() {
         return id;

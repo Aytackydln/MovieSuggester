@@ -26,6 +26,14 @@ public class Movie {
     private String runtime;
     private List<Rating> ratings;
 
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
+    }
+
     @Id
     public int getId() {
         return id;
