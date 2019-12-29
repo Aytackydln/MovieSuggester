@@ -43,7 +43,7 @@ public class SuggestionController {
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, path = "randomList")
     public Iterable<Movie> getRandomList(Integer size) {
-        if (size == null) size = 5;
+        if (size == null) size = 4;
         return collaborativeService.getUndecidedList(size);
     }
 

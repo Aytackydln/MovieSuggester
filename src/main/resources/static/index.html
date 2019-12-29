@@ -1,16 +1,16 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Online Movie Suggester</title>
-<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="css/style.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="css/font-awesome.css">
-<link rel="stylesheet" href="css/rating.css">
+	<meta charset="utf-8">
+	<title>Online Movie Suggester</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/rating.css">
 
 </head>
 
-<body>
+<body onload="loadBody()">
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 	<a class="navbar-brand" href="#">Movie Suggester</a>
@@ -27,37 +27,39 @@
 	</ul>
 </nav>
 
-    <div id="movies" class="container">
-    		<div id="card1" class="movie-card">
-			<div class="movie-header" style="background: url(https://m.media-amazon.com/images/M/MV5BMTk5ODk1NDkxMF5BMl5BanBnXkFtZTcwNTA5OTY0OQ@@._V1_SX300.jpg)">
+<div id="movies" class="container">
 
-			</div><!--movie-header-->
+	<div id="card1" class="movie-card">
+		<div class="movie-header">
+
+		</div><!--movie-header-->
+
 		<div class="movie-content">
 			<div class="movie-content-header">
 				<a href="#">
-					<h3 class="movie-title">Man of Steel</h3>
+					<h3 class="movie-title">-</h3>
 				</a>
 			</div>
 			<div class="movie-info">
 				<div class="info-section">
 					<label>Released</label>
-					<span>14 Jun 2013</span>
+					<span>-</span>
 				</div>
 				<div class="info-section">
 					<label>Runtime</label>
-					<span>143 min</span>
+					<span>-</span>
 				</div><!--screen-->
 				<div class="info-section">
 					<label>IMDB</label>
-					<a href="https://www.imdb.com/title/tt0770828"><i class="icon-external-link"></i></a>
+					<a href="#"><i class="icon-external-link"></i></a>
 				</div>
 			</div>
 			<div class="rating-center">
-			  <form id="form1" action="./models/model" method="post">
-		  		
-		  			<input class="movieId" type="hidden" value="id1" />
-		  			<input class="userRating" type="hidden"/>
-			  		
+				<form id="form1" method="post">
+
+					<input class="movieId" type="hidden"/>
+					<input class="userRating" type="hidden"/>
+
 					<div class="rating">
 						<input id="star5" name="star" type="radio" value="1-5" class="radio-btn hide" />
 						<label for="star5" >☆</label>
@@ -71,43 +73,43 @@
 						<label for="star1" >☆</label>
 						<div class="clear"></div>
 					</div>
-					
-			
+
+
 				</form>
 			</div>
 		</div><!--movie-content-->
 	</div><!--movie-card-->
-	
+
 	<div id="card2" class="movie-card">
-		<div class="movie-header" style="background: url(https://m.media-amazon.com/images/M/MV5BMjM3MjQ1MzkxNl5BMl5BanBnXkFtZTgwODk1ODgyMjI@._V1_SX300.jpg);">
-		
+		<div class="movie-header">
+
 		</div><!--movie-header-->
 		<div class="movie-content">
 			<div class="movie-content-header">
 				<a href="#">
-					<h3 class="movie-title">Baby Driver</h3>
+					<h3 class="movie-title">-</h3>
 				</a>
 			</div>
 			<div class="movie-info">
 				<div class="info-section">
 					<label>Released</label>
-					<span>28 Jun 2017</span>
+					<span>-</span>
 				</div>
 				<div class="info-section">
 					<label>Runtime</label>
-					<span>113 min</span>
+					<span>-</span>
 				</div><!--screen-->
 				<div class="info-section">
 					<label>IMDB</label>
-					<a href="https://www.imdb.com/title/tt3890160"><i class="icon-external-link"></i></a>
+					<a href="#"><i class="icon-external-link"></i></a>
 				</div>
 			</div>
 			<div class="rating-center">
-			  <form id="form2" action="./models/model" method="post">
-		  		
-		  			<input class="movieId" type="hidden" value="id2" />
-		  			<input class="userRating" type="hidden"/>
-			  		
+				<form id="form2" method="post">
+
+					<input class="movieId" type="hidden"/>
+					<input class="userRating" type="hidden"/>
+
 					<div class="rating">
 						<input id="star5-2" name="star" type="radio" value="2-5" class="radio-btn hide" />
 						<label for="star5-2" >☆</label>
@@ -125,37 +127,37 @@
 			</div>
 		</div><!--movie-content-->
 	</div><!--movie-card-->
-	
+
 	<div id="card3" class="movie-card">
-		<div class="movie-header" style="background: url(https://m.media-amazon.com/images/M/MV5BMTU3MjUwMzQ3MF5BMl5BanBnXkFtZTgwMjcwNjkxMjI@._V1_SX300.jpg);">
-			
+		<div class="movie-header">
 		</div><!--movie-header-->
+
 		<div class="movie-content">
 			<div class="movie-content-header">
 				<a href="#">
-					<h3 class="movie-title">The Dark Tower</h3>
+					<h3 class="movie-title">-</h3>
 				</a>
 			</div>
 			<div class="movie-info">
 				<div class="info-section">
 					<label>Released</label>
-					<span>04 Aug 2017</span>
+					<span>-</span>
 				</div>
 				<div class="info-section">
 					<label>Runtime</label>
-					<span>95 min</span>
+					<span>-</span>
 				</div><!--screen-->
 				<div class="info-section">
 					<label>IMDB</label>
-					<a href="https://www.imdb.com/title/tt1648190"><i class="icon-external-link"></i></a>
+					<a href="#"><i class="icon-external-link"></i></a>
 				</div>
 			</div>
 			<div class="rating-center">
-			  <form id="form3" action="./models/model" method="post">
-		  		
-		  			<input class="movieId" type="hidden" value="id3" />
-		  			<input class="userRating" type="hidden"/>
-			  		
+				<form id="form3" method="post">
+
+					<input class="movieId" type="hidden"/>
+					<input class="userRating" type="hidden"/>
+
 					<div class="rating">
 						<input id="star5-3" name="star" type="radio" value="3-5" class="radio-btn hide" />
 						<label for="star5-3" >☆</label>
@@ -173,38 +175,37 @@
 			</div>
 		</div><!--movie-content-->
 	</div><!--movie-card-->
-	
-	
+
+
 	<div id="card4" class="movie-card">
-		<div class="movie-header" style="background: url(https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg);">
-	
+		<div class="movie-header">
 		</div><!--movie-header-->
 		<div class="movie-content">
 			<div class="movie-content-header">
 				<a href="#">
-					<h3 class="movie-title">Blade Runner 2049</h3>
+					<h3 class="movie-title">-</h3>
 				</a>
 			</div>
 			<div class="movie-info">
 				<div class="info-section">
 					<label>Released</label>
-					<span>06 Oct 2017</span>
+					<span>-</span>
 				</div>
 				<div class="info-section">
 					<label>Runtime</label>
-					<span>164 min</span>
+					<span>-</span>
 				</div><!--screen-->
 				<div class="info-section">
 					<label>IMDB</label>
-					<a href="https://www.imdb.com/title/tt1856101"><i class="icon-external-link"></i></a>
+					<a href="#"><i class="icon-external-link"></i></a>
 				</div>
 			</div>
 			<div class="rating-center">
-			  <form id="form4" action="./models/model" method="post">
-		  		
-		  			<input class="movieId" type="hidden" value="id4" />
-		  			<input class="userRating" type="hidden"/>
-			  		
+				<form id="form4"  method="post">
+
+					<input class="movieId" type="hidden"/>
+					<input class="userRating" type="hidden"/>
+
 					<div class="rating">
 						<input id="star5-4" name="star" type="radio" value="4-5" class="radio-btn hide" />
 						<label for="star5-4" >☆</label>
@@ -222,13 +223,13 @@
 			</div>
 		</div><!--movie-content-->
 	</div><!--movie-card-->
-                    
-	</div>
-	
-	
-	<form>
-		
-	</form>
+
+</div>
+
+
+<form>
+
+</form>
 
 
 

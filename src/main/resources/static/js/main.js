@@ -1,53 +1,126 @@
+var array = [];
 
 $(document).ready(function(){
 	"use strict";
 
     $('input:radio').change(
       function(){
-		  
-		var value = this.value.split('-');
-		 
-		var cardName = '#card'+value[0];
-		var card = document.querySelector(cardName);
-		  
-		var movieId = card.querySelector('.movieId');
-		var userRating = card.querySelector('.userRating');
-        userRating.value = value[1];
-		alert(movieId.value + " : " + userRating.value);
+
+		let value = this.value.split('-');
+
+		let cardName = '#card'+value[0];
+		let card = document.querySelector(cardName);
+
+		let movieId = card.querySelector('.movieId');
+
+		let ratedMovieId = parseInt(movieId.value);
+		let rating = parseInt(value[1]);
+
+		let voteResult = new VoteResult(ratedMovieId,rating, array)
+
+		console.log("VoteResult = "+ voteResult.toJson());
+
+		alert(ratedMovieId + " : " + rating);
+
+		  jQuery.ajax ({
+			  url: "./suggestion/vote",
+			  type: "POST",
+			  data: voteResult.toJson(),
+			  dataType: "json",
+			  contentType: "application/json; charset=utf-8",
+			  beforeSend: function(){
+				  $('body').loading();
+			  },
+			  success: function(data){
+				  let movie = new Movie();
+				  movie.applyData(data);
+				  array[value[0]-1] = movie;
+				  setCardValues(card,data);
+			  },
+			  fail: function () {
+			  	  alert("There is an error while sending your vote!")
+			  }});
+
+		  $(this).prop('checked', false);
+	});
 		  
 
-		  
-		 
-		  //$("#form1").submit();
-		  
-		jQuery.getJSON("./models/model", function(json) {
-			console.log(json); // this will show the info in firebug console 
-			
-			var movieheader = card.children.item(0);
-			movieheader.style.backgroundImage = "url("+json.poster+")";
-			
-			var  movieContent = card.children.item(1);
-			
-			var movieTitle = movieContent.children.item(0).children.item(0).children.item(0);
-			movieTitle.textContent = json.title;
-			
-			var movieReleaseDate = movieContent.children.item(1).children.item(0).children.item(1);
-			movieReleaseDate.textContent = json.releaseDate;
-			
-			var movieRuntime = movieContent.children.item(1).children.item(1).children.item(1);
-			movieRuntime.textContent = json.runtime;
-			
-			var movieImdb = movieContent.children.item(1).children.item(2).children.item(1);
-			movieImdb.setAttribute("href", json.imdbUrl);
-			
-			movieId = json.id;
-			userRating.value = "0";
-			
-		});
-		  
-		  $(this).prop('checked', false);
-		  
-		  
-    }); 
 });
+
+function loadBody() {
+
+	jQuery.getJSON("./suggestion/randomList", function(json) {
+		for (let i=1; i<5; i++){
+			let cardName = '#card'+i;
+			let card = document.querySelector(cardName);
+
+			let movie = new Movie();
+			movie.applyData(json[i-1]);
+
+			array.push(movie);
+
+			console.log(movie);
+
+
+			setCardValues(card, movie);
+
+		}
+	})
+}
+
+function setCardValues(card, movie) {
+
+	let movieId = card.querySelector('.movieId');
+	let userRating = card.querySelector('.userRating');
+
+	let movieHeader = card.children.item(0);
+	movieHeader.style.backgroundImage = "url("+ movie.poster +")";
+
+	let  movieContent = card.children.item(1);
+
+	let movieTitle = movieContent.children.item(0).children.item(0).children.item(0);
+	movieTitle.textContent = movie.title;
+
+	let movieReleaseDate = movieContent.children.item(1).children.item(0).children.item(1);
+	movieReleaseDate.textContent = movie.releaseDate;
+
+	let movieRuntime = movieContent.children.item(1).children.item(1).children.item(1);
+	movieRuntime.textContent = movie.runtime;
+
+	let movieImdb = movieContent.children.item(1).children.item(2).children.item(1);
+	movieImdb.setAttribute("href", movie.imdbUrl);
+
+	movieId.value = movie.id;
+	userRating.value = "0";
+
+}
+
+class Movie {
+	constructor(id, title, releaseDate, imdbUrl, poster, runtime, rating, totalRatings) {
+		this.id = id;
+		this.title = title;
+		this.releaseDate = releaseDate;
+		this.imdbUrl = imdbUrl;
+		this.poster = poster;
+		this.runtime = runtime;
+		this.rating = rating;
+		this.totalRatings = totalRatings
+	}
+
+	applyData(json) {
+		Object.assign(this, json);
+	}
+}
+
+class VoteResult{
+	constructor(ratedMovieId, rating, filterOut) {
+		this.ratedMovieId = ratedMovieId;
+		this.rating = rating;
+		this.filterOut = filterOut
+	}
+
+	toJson(){
+		return JSON.stringify(this)
+	}
+}
 
