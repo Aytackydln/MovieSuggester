@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/processLogin")
                 .and()
                 .csrf().disable()
-                .logout().logoutSuccessUrl("/login");
+                .logout().logoutSuccessUrl("/login").logoutUrl("/logout");
 
     }
 
