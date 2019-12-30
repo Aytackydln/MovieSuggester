@@ -1,16 +1,13 @@
 package tr.edu.eskisehir.camishani.dataacquisition.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 import tr.edu.eskisehir.camishani.dataacquisition.jpa.model.User;
 import tr.edu.eskisehir.camishani.dataacquisition.service.UserService;
 
-@RestController
+@Controller
 @RequestMapping("user")
 public class UserController {
     private final UserService userService;
@@ -20,14 +17,16 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "current")
-    public User getCurrent() {
+    public @ResponseBody
+    User getCurrent() {
         return userService.getCurrentUser();
     }
 
     @PostMapping("signup")
     public View register(User user) {
+        if ("".equals(user.getUsername()) || "".equals(user.getPassword())) throw new IllegalArgumentException();
         userService.signupUser(user);
 
-        return new RedirectView("login.html");
+        return new RedirectView("/login.html");
     }
 }

@@ -26,11 +26,6 @@
 
 			});
 
-			$(".btn").click(function(){
-				$(".input").val("");
-
-			});
-
 		});
 	</script>
 
@@ -41,20 +36,24 @@
 	<div class="login">log in</div>
 	<div class="signup">sign up</div>
 
-	<form class="login-form" action="loginProcess">
+	<form class="login-form" action="/loginProcess" method="post">
 		<input name="username" type="text" class="input" placeholder="Email or Username"><br>
 		<input name="password" type="password" class="input" placeholder="Password"><br>
-		<div class="btn">log in</div>
+		<div class="btn">
+			<button class="btn" type="submit">log in</button>
+		</div>
 		<span>
 				<a href="#">Forgot your username or password?</a>
 			</span>
 
 	</form>
 
-	<form class="signup-form" action="signup">
-		<input name="username" type="text" placeholder="Choose a username" class="input"><br>
+	<form class="signup-form" action="/user/signup" method="post">
+		<input id="username" name="username" type="text" placeholder="Choose a username" class="input"><br>
 		<input name="password" type="password" placeholder="Choose a password" class="input"><br>
-		<div class="btn">create account</div>
+		<div class="btn">
+			<button class="btn" type="submit">create account</button>
+		</div>
 	</form>
 
 </div>
