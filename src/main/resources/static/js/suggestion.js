@@ -2,6 +2,7 @@ function loadMock() {
 
 	jQuery.getJSON("./suggestion/userSuggestion", function(json) {
 		var recommendation1 = JSON.parse(json)
+        $("#card1").innerHTML = "<img src=" + recommendation1.movie.poster + ">";
 	})
 
     jQuery.getJSON("./suggestion/itemSuggestion", function(json) {

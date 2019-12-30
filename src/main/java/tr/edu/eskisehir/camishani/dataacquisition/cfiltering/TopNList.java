@@ -3,8 +3,8 @@ package tr.edu.eskisehir.camishani.dataacquisition.cfiltering;
 import org.springframework.data.util.Pair;
 
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.TreeSet;
+import java.util.concurrent.Semaphore;
 
 public class TopNList<K extends SimilarityMeasurable> {
 
@@ -12,7 +12,7 @@ public class TopNList<K extends SimilarityMeasurable> {
     private final K center;
     private final int capacity;
     private final SimilarityMeasure similarityMeasure;
-    private final SimilarityFactorGetter<? extends Object> similarityFactorGetter;
+    private final SimilarityFactorGetter<?> similarityFactorGetter;
 
     public TopNList(K center, int capacity, SimilarityMeasure similarityMeasure, SimilarityFactorGetter<?> similarityFactorGetter, Comparator<Pair<K, Double>> comparator) {
         this.center = center;
@@ -20,10 +20,6 @@ public class TopNList<K extends SimilarityMeasurable> {
         this.similarityMeasure = similarityMeasure;
         this.similarityFactorGetter = similarityFactorGetter;
         neighbors = new TreeSet<>(comparator);
-    }
-
-    public double getFurthestDistance() {
-        return neighbors.last().getSecond();
     }
 
     public void add(K element) {
@@ -39,11 +35,7 @@ public class TopNList<K extends SimilarityMeasurable> {
         }
     }
 
-    public K getFirst() {
-        return neighbors.first().getFirst();
-    }
-
-    public Iterator<Pair<K, Double>> getPairs() {
-        return neighbors.iterator();
+    public Iterable<Pair<K, Double>> getPairs() {
+        return neighbors;
     }
 }

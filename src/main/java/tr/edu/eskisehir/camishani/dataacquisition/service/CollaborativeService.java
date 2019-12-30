@@ -95,25 +95,26 @@ public class CollaborativeService {
         return movieRepository.getUnvotedMoviesOfUser(userService.getCurrentUser(), PageRequest.of(0, size)).getContent();
     }
 
-    @Transactional()
     public Recommendation getUserBasedRecommend(Integer neighbors) {
+        return getUserBasedRecommend(userService.getCurrentUser(), neighbors);
+    }
+
+    public Recommendation getUserBasedRecommend(final User currentUser, Integer neighbors) {
         if (neighbors == null) neighbors = 60;
         final Recommendation recommendation = new Recommendation();
         recommendation.setK(neighbors);
         recommendation.setType("user");
 
-        User currentUser = userService.getCurrentUser();
         recommendation.setUser(currentUser);
-        TopNList<User> topNList = new TopNList<>(currentUser, neighbors, PEARSONS_CORRELATION, USER_FACTOR_GETTER, ABS_PEARSON_COMPARATOR);
+        final TopNList<User> topNList = new TopNList<>(currentUser, neighbors, PEARSONS_CORRELATION, USER_FACTOR_GETTER, ABS_PEARSON_COMPARATOR);
 
-        for (User otherUser : userRepository.getAllByIdIsNot(currentUser.getId())) {
-            topNList.add(otherUser);
-        }
+        List<User> otherUsers = userRepository.getAllByIdIsNot(currentUser.getId());
+        for (User otherUser : otherUsers) topNList.add(otherUser);
+
 
         int maxMovieId = 0;
 
-        for (Iterator<Pair<User, Double>> it = topNList.getPairs(); it.hasNext(); ) {
-            Pair<User, Double> u = it.next();
+        for (Pair<User, Double> u : topNList.getPairs()) {
 
             int maxId = u.getFirst().getMaxFactorId();
             if (maxId > maxMovieId) {
@@ -123,8 +124,7 @@ public class CollaborativeService {
         double[] movies = new double[maxMovieId + 1];
         double[] totalSimilarity = new double[maxMovieId + 1];
 
-        for (Iterator<Pair<User, Double>> it = topNList.getPairs(); it.hasNext(); ) {
-            Pair<User, Double> u = it.next();
+        for (Pair<User, Double> u : topNList.getPairs()) {
             User user = u.getFirst();
             double similarity = u.getSecond();
 
@@ -140,7 +140,7 @@ public class CollaborativeService {
             } else {
                 for (Rating rating : user.getRatings()) {
                     int id = USER_FACTOR_GETTER.getMeasureId(rating);
-                    int factor = -USER_FACTOR_GETTER.getMeasureValue(rating) + 6;
+                    int factor = 6 - USER_FACTOR_GETTER.getMeasureValue(rating);
 
                     movies[id] += -similarity * factor;
                     totalSimilarity[id] -= similarity;
@@ -153,13 +153,15 @@ public class CollaborativeService {
         return recommendation;
     }
 
-    @Transactional
     public Recommendation getItemBasedRecommend(Integer neighbors) {
+        return getItemBasedRecommend(userService.getCurrentUser(), neighbors);
+    }
+
+    public Recommendation getItemBasedRecommend(User currentUser, Integer neighbors) {
         if (neighbors == null) neighbors = 60;
         final Recommendation recommendation = new Recommendation();
         recommendation.setK(neighbors);
 
-        User currentUser = userService.getCurrentUser();
         recommendation.setUser(currentUser);
         recommendation.setType("item");
 
@@ -170,11 +172,12 @@ public class CollaborativeService {
 
         int ratingNo = 0;
         for (Rating r : currentUser.getRatings()) {
-            final Movie votedMovie = r.getMovie();
-            List<Pair<Movie, Double>> similarities = movieSimilarityService.getSimilarityMap(votedMovie, neighbors);
+            List<Pair<Movie, Double>> similarities = movieSimilarityService.getSimilarityMap(r.getMovie(), neighbors);
             for (Pair<Movie, Double> entry : similarities) {
-                movieRatings[entry.getFirst().getId()] += entry.getSecond() * r.getRating();
-                totalSimilarities[entry.getFirst().getId()] += entry.getSecond();
+                int similartMovieId = entry.getFirst().getId();
+                double similarity = entry.getSecond();
+                movieRatings[similartMovieId] += similarity * r.getRating();
+                totalSimilarities[similartMovieId] += similarity;
             }
             ratingNo++;
         }
@@ -236,10 +239,9 @@ public class CollaborativeService {
         double accuracy = (double) correct / (correct + incorrect) * 100;
         if (Double.isNaN(accuracy)) accuracy = 0;
         recommendation.setAccuracy(accuracy);
-        recommendationRepository.save(recommendation);
+        //recommendationRepository.save(recommendation);
 
-        System.out.println(correct + " correct, " + incorrect + " incorrect" +
-                " " + accuracy + "% k=" + recommendation.getK());
+        //System.out.println(correct + " correct, " + incorrect + " incorrect" + " " + accuracy + "% k=" + recommendation.getK());
 
     }
 }

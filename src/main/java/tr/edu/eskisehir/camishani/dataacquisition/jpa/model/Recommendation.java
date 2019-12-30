@@ -31,6 +31,17 @@ public class Recommendation {
         return Objects.hash(id);
     }
 
+    @Override
+    public String toString() {
+        return "Recommendation{" +
+                "user=" + user +
+                ", movie=" + movie +
+                ", prediction=" + prediction +
+                ", accuracy=" + accuracy +
+                ", k=" + k +
+                '}';
+    }
+
     @PrePersist
     void prePersist() {
         setDate(new Date());
