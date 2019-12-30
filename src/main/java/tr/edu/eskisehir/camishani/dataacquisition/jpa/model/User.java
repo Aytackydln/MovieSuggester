@@ -3,18 +3,23 @@ package tr.edu.eskisehir.camishani.dataacquisition.jpa.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import tr.edu.eskisehir.camishani.dataacquisition.cfiltering.SimilarityMeasurable;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class User implements Serializable, SimilarityMeasurable {
+public class User implements SimilarityMeasurable, Serializable, UserDetails {
 
     private int id;
     private String username;
@@ -113,5 +118,40 @@ public class User implements Serializable, SimilarityMeasurable {
                 max = r.getMovie().getId();
         }
         return max;
+    }
+
+    @Override
+    @Transient
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    @JsonIgnore
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getAuthority().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 }

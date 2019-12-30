@@ -13,4 +13,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     @Query("SELECT DISTINCT u FROM User u JOIN FETCH u.ratings rating JOIN FETCH rating.movie m WHERE u.id <> :id")
     List<User> getAllByIdIsNot(int id);
+
+    User findByUsername(String s);
 }

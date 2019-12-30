@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import tr.edu.eskisehir.camishani.dataacquisition.service.UserService;
 
 import javax.sql.DataSource;
 
@@ -24,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {  // Spring Security Configuration
         http
                 .formLogin().defaultSuccessUrl("/index.html")
-                .loginProcessingUrl("loginProcess")
+                .loginProcessingUrl("/processLogin")
                 .and()
                 .csrf().disable()
                 .logout().logoutSuccessUrl("/login");
@@ -40,7 +41,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configAuthentication(final AuthenticationManagerBuilder auth, final DataSource dataSource) throws Exception {
+    public void configAuthentication(final AuthenticationManagerBuilder auth, final DataSource dataSource,
+                                     UserService userService) throws Exception {
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select username, password, enabled from users where username=?")
