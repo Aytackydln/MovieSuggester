@@ -16,6 +16,7 @@ import tr.edu.eskisehir.camishani.dataacquisition.service.CollaborativeService;
 import tr.edu.eskisehir.camishani.dataacquisition.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -55,14 +56,20 @@ public class SuggestionController {
 
     @RequestMapping(method = RequestMethod.POST, path = "vote", consumes = "application/json")
     public Movie vote(@RequestBody SubmitVoteRequest submitVoteRequest) {
-        final Movie movie = new Movie();
-        movie.setId(submitVoteRequest.getRatedMovieId());
+        if (submitVoteRequest.getRatedMovieId() != null) {
 
-        Rating newRating = new Rating();
-        newRating.setMovie(movie);
-        newRating.setRating(submitVoteRequest.getRating());
+            final Movie movie = new Movie();
+            movie.setId(submitVoteRequest.getRatedMovieId());
 
-        userService.vote(newRating);
+            Rating newRating = new Rating();
+            newRating.setMovie(movie);
+            newRating.setRating(submitVoteRequest.getRating());
+
+            userService.vote(newRating);
+
+        }
+
+        submitVoteRequest.getFilterOut().removeAll(Collections.singleton(null));
 
         return collaborativeService.getUndecided(submitVoteRequest.getFilterOut());
     }

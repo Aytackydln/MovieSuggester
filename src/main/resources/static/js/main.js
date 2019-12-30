@@ -6,27 +6,34 @@ $(document).ready(function(){
     $('input:radio').change(
       function(){
 
-		let value = this.value.split('-');
+          let value = this.value.split('-');
 
-		let cardName = '#card'+value[0];
-		let card = document.querySelector(cardName);
+          let cardName = '#card' + value[0];
+          let card = document.querySelector(cardName);
 
-		let movieId = card.querySelector('.movieId');
+          let movieId = card.querySelector('.movieId');
 
-		let ratedMovieId = parseInt(movieId.value);
-		let rating = parseInt(value[1]);
+          let ratedMovieId = parseInt(movieId.value);
+          let rating = parseInt(value[1]);
 
-		let voteResult = new VoteResult(ratedMovieId,rating, array)
+          let voteResult;
+          if (rating === 0) {
+              array.push(array[value[0] - 1]);
+              array[value[0] - 1] = null;
+              voteResult = new VoteResult(null, null, array)
+          } else {
+              voteResult = new VoteResult(ratedMovieId, rating, array)
+          }
 
-		console.log("VoteResult = "+ voteResult.toJson());
+          console.log("VoteResult = " + voteResult.toJson());
 
-		//alert(ratedMovieId + " : " + rating);
+          //alert(ratedMovieId + " : " + rating);
 
-		  jQuery.ajax ({
-			  url: "./suggestion/vote",
-			  type: "POST",
-			  data: voteResult.toJson(),
-			  dataType: "json",
+          jQuery.ajax({
+              url: "./suggestion/vote",
+              type: "POST",
+              data: voteResult.toJson(),
+              dataType: "json",
 			  contentType: "application/json; charset=utf-8",
 			  beforeSend: function(){
 				  $("#overlay").fadeIn(300);

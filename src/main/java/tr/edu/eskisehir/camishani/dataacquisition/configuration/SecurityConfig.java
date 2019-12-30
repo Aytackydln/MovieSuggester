@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {  // Spring Security Configuration
         http
-                .formLogin().defaultSuccessUrl("/index.html")
+                .formLogin().defaultSuccessUrl("/home.html")
                 .loginProcessingUrl("/processLogin")
                 .and()
                 .csrf().disable()
