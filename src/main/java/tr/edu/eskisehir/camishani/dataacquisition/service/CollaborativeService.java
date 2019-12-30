@@ -100,7 +100,7 @@ public class CollaborativeService {
     }
 
     public Recommendation getUserBasedRecommend(final User currentUser, Integer neighbors) {
-        if (neighbors == null) neighbors = 60;
+        if (neighbors == null) neighbors = 30;
         final Recommendation recommendation = new Recommendation();
         recommendation.setK(neighbors);
         recommendation.setType("user");

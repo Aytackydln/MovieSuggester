@@ -4,7 +4,6 @@ import org.springframework.data.util.Pair;
 
 import java.util.Comparator;
 import java.util.TreeSet;
-import java.util.concurrent.Semaphore;
 
 public class TopNList<K extends SimilarityMeasurable> {
 

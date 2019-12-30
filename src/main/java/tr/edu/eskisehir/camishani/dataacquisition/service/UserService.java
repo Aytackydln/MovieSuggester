@@ -18,6 +18,11 @@ public class UserService {
         this.ratingRepository = ratingRepository;
     }
 
+    public void signupUser(User user) {
+        user.getAuthority().add("ROLE_USER");
+        userRepository.save(user);
+    }
+
     @Transactional(readOnly = true)
     public User getCurrentUser() {
         final User user = userRepository.findById(441).get();

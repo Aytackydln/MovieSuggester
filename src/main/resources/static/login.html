@@ -8,17 +8,17 @@
 	
 		<script>
 		$(document).ready(function(){
-			$(".login-form").hide();
-			$(".login").css("background","none");
+			$(".signup-form").hide();
+			$(".signup").css("background", "none");
 
-			$(".login").click(function(){
+			$(".login").click(function () {
 				$(".signup-form").hide();
 				$(".login-form").show();
-				$(".signup").css("background","none")
-				$(".login").css("background","#fff");
+				$(".signup").css("background", "none")
+				$(".login").css("background", "#fff");
 
 			});
-			$(".signup").click(function(){
+			$(".signup").click(function () {
 				$(".signup-form").show();
 				$(".login-form").hide();
 				$(".signup").css("background","#fff")
@@ -37,28 +37,27 @@
 </head>
 <body>
 
-	<div class="container">
-		<div class="signup">sign up</div>
-		<div class="login">log in</div>
+<div class="container">
+	<div class="login">log in</div>
+	<div class="signup">sign up</div>
 
-		<div class="signup-form">
-			<input type="text" placeholder="Your Email Address" class="input"><br>
-			<input type="text" placeholder="Choose a username" class="input"><br>
-			<input type="password" placeholder="Choose a password" class="input"><br>
-			<div class="btn">create account</div>
-		</div>
-
-		<div class="login-form">
-			<input type="text" class="input" placeholder="Email or Username"><br>
-			<input type="password" class="input" placeholder="Password"><br>
-			<div class="btn">log in</div>
-			<span>
+	<form class="login-form" action="loginProcess">
+		<input name="username" type="text" class="input" placeholder="Email or Username"><br>
+		<input name="password" type="password" class="input" placeholder="Password"><br>
+		<div class="btn">log in</div>
+		<span>
 				<a href="#">Forgot your username or password?</a>
 			</span>
-			
-		</div>
 
-	</div>
+	</form>
+
+	<form class="signup-form" action="signup">
+		<input name="username" type="text" placeholder="Choose a username" class="input"><br>
+		<input name="password" type="password" placeholder="Choose a password" class="input"><br>
+		<div class="btn">create account</div>
+	</form>
+
+</div>
 	
 
 </body>
