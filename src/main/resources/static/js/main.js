@@ -78,6 +78,62 @@ function loadBody() {
 	})
 }
 
+function loadSearchResults(){
+	let url = new URL(window.location.href);
+	let title = url.searchParams.get("title");
+
+	jQuery.getJSON("./suggestion/search?title=" + title + "&size=1682" , function (json) {
+		let totalMovies = json.totalElements;
+		let numberOfElements, totalPages;
+
+		console.log(json);
+
+		if(totalMovies<4){
+			numberOfElements = json.numberOfElements;
+			totalPages = 1;
+		}else{
+			numberOfElements = 4;
+			totalPages = Math.ceil(totalMovies/4);
+		}
+
+		console.log(json);
+
+		for (let i=0; i<4; i++){
+			let cardName = "#card" + (i+1);
+			let card = document.querySelector(cardName);
+			if(i<numberOfElements){
+				let movie = new Movie();
+				movie.applyData(json.content[i]);
+				console.log(movie);
+				setCardValues(card, movie);
+			}else{
+				card.style.display = "none";
+			}
+		}
+
+		$('#pagination-demo').twbsPagination({
+			totalPages: totalPages,
+			visiblePages: 3,
+			onPageClick: function (event, page) {
+				for (let i=0; i<4; i++){
+					let cardName = "#card" + (i+1);
+					let card = document.querySelector(cardName);
+					if(i<numberOfElements){
+						let movie = new Movie();
+						movie.applyData(json.content[i+((page-1)*4)]);
+						setCardValues(card, movie);
+					}else{
+						card.style.display = "none";
+					}
+				}
+			}
+		});
+
+	});
+	
+
+}
+
 function setCardValues(card, movie) {
 
 	let movieId = card.querySelector('.movieId');

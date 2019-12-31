@@ -1,38 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Get Recommendation!</title>
-
-	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-	<link href="css/style.css" rel="stylesheet" type="text/css">
-	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-	
-
-</head>
+	<head>
+		<title>Get Recommendation</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="css/style.css" rel="stylesheet" type="text/css">
+		<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+	</head>
 <body >
 <div onload="loadMock()">
 	<div onload="myFunction()">
-	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-	<a class="navbar-brand" href="#">Movie Suggester</a>
-	<ul class="navbar-nav mr-auto">
-		<li class="nav-item">
-			<a class="nav-link" href="#">Home</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="#movies">Movies</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="./suggestion.html">Get Recommendation!</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="./login.html">Login</a>
-		</li>
-	</ul>
-	<form class="form-inline my-2 my-lg-0" method="get" action="./suggestion/search">
-		<input class="form-control mr-sm-2" type="search" placeholder="Search" name="title" required>
-		<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-	</form>
-</nav>
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<a class="navbar-brand" href="#">Movie Suggester</a>
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="./home.html">Home</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="./suggestion.html">Get Recommendation</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="./logout">Logout</a>
+				</li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0" method="get" action="./search.html">
+				<input class="form-control mr-sm-2" type="search" placeholder="Search" name="title" required>
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		</nav>
 
 <div id="movies" class="container">
 
