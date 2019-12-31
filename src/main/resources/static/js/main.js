@@ -84,9 +84,7 @@ function loadSearchResults(){
 
 	jQuery.getJSON("./suggestion/search?title=" + title + "&size=1682" , function (json) {
 		let totalMovies = json.totalElements;
-		let numberOfElements, totalPages;
-
-		console.log(json);
+		let numberOfElements, totalPages, lastElements;
 
 		if(totalMovies<4){
 			numberOfElements = json.numberOfElements;
@@ -94,9 +92,8 @@ function loadSearchResults(){
 		}else{
 			numberOfElements = 4;
 			totalPages = Math.ceil(totalMovies/4);
+			lastElements = totalMovies%4;
 		}
-
-		console.log(json);
 
 		for (let i=0; i<4; i++){
 			let cardName = "#card" + (i+1);
@@ -113,12 +110,14 @@ function loadSearchResults(){
 
 		$('#pagination-demo').twbsPagination({
 			totalPages: totalPages,
-			visiblePages: 3,
+			visiblePages: 5,
 			onPageClick: function (event, page) {
 				for (let i=0; i<4; i++){
 					let cardName = "#card" + (i+1);
 					let card = document.querySelector(cardName);
+					numberOfElements = (page==totalPages)?lastElements:4;
 					if(i<numberOfElements){
+						card.style.display = "block";
 						let movie = new Movie();
 						movie.applyData(json.content[i+((page-1)*4)]);
 						array[i] = movie;
