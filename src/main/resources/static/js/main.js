@@ -78,11 +78,53 @@ function loadBody() {
 	})
 }
 
-function loadSearchResults(){
+function loadSuggestions() {
+
+	console.log("Loading suggestions...");
+
+	jQuery.getJSON("suggestion/userSuggestion", function (json) {
+		let card = document.querySelector("#card1");
+		let movie = new Movie();
+		movie.applyData(json["movie"]);
+
+		card.querySelector(".accuracy").textContent = json["accuracy"];
+		card.querySelector(".neighbors").innerHTML = json["k"];
+
+		let rating = "";
+		let fullStars = json["prediction"];
+		for (let i = 0; i < fullStars; i++) {
+			rating += "<i class=\"icon-star icon-2x\"></i>";
+		}
+		card.querySelector(".rating").innerHTML = rating;
+
+		setCardValues(card, movie);
+	});
+
+	jQuery.getJSON("suggestion/itemSuggestion", function (json) {
+		let card = document.querySelector("#card2");
+		let movie = new Movie();
+		movie.applyData(json["movie"]);
+
+		card.querySelector(".accuracy").textContent = json["accuracy"];
+		card.querySelector(".neighbors").textContent = json["k"];
+
+		let rating = "";
+		let fullStars = json["prediction"];
+		for (let i = 0; i < fullStars; i++) {
+			rating += "<i class=\"icon-star icon-2x\"></i>";
+		}
+		card.querySelector(".rating").innerHTML = rating;
+
+		setCardValues(card, movie);
+	})
+}
+
+
+function loadSearchResults() {
 	let url = new URL(window.location.href);
 	let title = url.searchParams.get("title");
 
-	jQuery.getJSON("./suggestion/search?title=" + title + "&size=1682" , function (json) {
+	jQuery.getJSON("./suggestion/search?title=" + title + "&size=1682", function (json) {
 		let totalMovies = json.totalElements;
 		let numberOfElements, totalPages;
 

@@ -1,5 +1,7 @@
 package tr.edu.eskisehir.camishani.dataacquisition.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("suggestion")
 public class SuggestionController {
+    private static final Logger LOGGER = LogManager.getLogger(SuggestionController.class);
 
     private final CollaborativeService collaborativeService;
     private final UserService userService;
@@ -35,11 +38,13 @@ public class SuggestionController {
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, path = "itemSuggestion")
     public Recommendation getItemSuggestion(Integer neighbors) {
+        LOGGER.info("Getting itemSuggestion");
         return collaborativeService.getItemBasedRecommend(neighbors);
     }
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, path = "userSuggestion")
     public Recommendation getUserSuggestion(Integer neighbors) {
+        LOGGER.info("Getting userSuggestion");
         return collaborativeService.getUserBasedRecommend(neighbors);
     }
 

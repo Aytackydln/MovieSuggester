@@ -148,7 +148,7 @@ public class CollaborativeService {
             }
         }
 
-        getBestMovie(recommendation, movies, totalSimilarity);
+        getBestMovie(currentUser, recommendation, movies, totalSimilarity);
 
         return recommendation;
     }
@@ -182,12 +182,12 @@ public class CollaborativeService {
             ratingNo++;
         }
 
-        getBestMovie(recommendation, movieRatings, totalSimilarities);
+        getBestMovie(currentUser, recommendation, movieRatings, totalSimilarities);
 
         return recommendation;
     }
 
-    private void getBestMovie(Recommendation recommendation, double[] movieRatings, double[] totalSimilarities) {
+    private void getBestMovie(User user, Recommendation recommendation, double[] movieRatings, double[] totalSimilarities) {
 
         for (int i = 1; i < movieRatings.length; i++) {
             if (movieRatings[i] != 0) {
@@ -203,7 +203,7 @@ public class CollaborativeService {
         double bestTotalSimilarity = 0;
         int bestMovieId = 0;
 
-        List<Rating> alreadyRatedList = userService.getCurrentUser().getRatings();
+        List<Rating> alreadyRatedList = user.getRatings();
 
         bestResult:
         for (int i = 0; i < movieRatings.length; i++) {
