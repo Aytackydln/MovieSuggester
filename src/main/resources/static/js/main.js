@@ -104,7 +104,7 @@ function loadSearchResults(){
 			if(i<numberOfElements){
 				let movie = new Movie();
 				movie.applyData(json.content[i]);
-				console.log(movie);
+				array.push(movie);
 				setCardValues(card, movie);
 			}else{
 				card.style.display = "none";
@@ -121,6 +121,7 @@ function loadSearchResults(){
 					if(i<numberOfElements){
 						let movie = new Movie();
 						movie.applyData(json.content[i+((page-1)*4)]);
+						array[i] = movie;
 						setCardValues(card, movie);
 					}else{
 						card.style.display = "none";
@@ -130,7 +131,7 @@ function loadSearchResults(){
 		});
 
 	});
-	
+
 
 }
 

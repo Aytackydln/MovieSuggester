@@ -169,3 +169,9 @@ a:hover {
 .is-hide{
   display:none;
 }
+
+#pagination-demo{
+  margin-top: 20px;
+  justify-content: center;
+  display: flex
+}
