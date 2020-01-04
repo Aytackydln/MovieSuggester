@@ -1,5 +1,7 @@
 package tr.edu.eskisehir.camishani.dataacquisition.service;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,7 +89,7 @@ public class MovieSimilarityService {
     }
 
     public List<Pair<Movie, Double>> getSimilarityMap(Movie votedMovie, int neighbors) {
-        List<MovieSimilarity> similarities = movieSimilarityRepository.getSimilaritiesOf(votedMovie).subList(0, neighbors);
+        List<MovieSimilarity> similarities = movieSimilarityRepository.getSimilaritiesOf(votedMovie, PageRequest.of(0, neighbors));
         return similarities.stream().map(movieSimilarity -> {
             Movie movie;
             if (movieSimilarity.getMovie1().getId() == votedMovie.getId()) movie = movieSimilarity.getMovie2();

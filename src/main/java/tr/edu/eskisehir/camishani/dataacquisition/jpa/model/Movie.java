@@ -1,6 +1,7 @@
 package tr.edu.eskisehir.camishani.dataacquisition.jpa.model;
 
 import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 @Entity
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Movie implements Serializable {
@@ -87,6 +89,7 @@ public class Movie implements Serializable {
         this.runtime = runtime;
     }
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
     @JsonIgnore
     public List<Rating> getRatings() {

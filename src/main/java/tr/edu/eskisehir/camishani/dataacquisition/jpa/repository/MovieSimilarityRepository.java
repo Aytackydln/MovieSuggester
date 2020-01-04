@@ -1,5 +1,6 @@
 package tr.edu.eskisehir.camishani.dataacquisition.jpa.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -13,5 +14,5 @@ import java.util.List;
 public interface MovieSimilarityRepository extends CrudRepository<MovieSimilarity, MovieSimilarityKey> {
 
     @Query("SELECT DISTINCT s FROM MovieSimilarity s JOIN FETCH s.movie1 WHERE s.movie1 = :movie OR s.movie2 = :movie ORDER BY s.similarity DESC")
-    List<MovieSimilarity> getSimilaritiesOf(Movie movie);
+    List<MovieSimilarity> getSimilaritiesOf(Movie movie, Pageable pageable);
 }
